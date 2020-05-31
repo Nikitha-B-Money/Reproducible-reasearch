@@ -17,9 +17,17 @@ output:
 # Loading data
 
 
-```{r}
+
+```r
 data<-read.csv("activity.csv")
 str(data)
+```
+
+```
+## 'data.frame':	17568 obs. of  3 variables:
+##  $ steps   : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ date    : Factor w/ 61 levels "2012-10-01","2012-10-02",..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
 ```
 
 # step2
@@ -28,24 +36,37 @@ str(data)
 ## What is mean total number of steps taken per day?
 
 
-```{r Number Of Steps taken per day}
+
+```r
 stepsperday<-tapply(data$steps,data$date,sum,na.rm=TRUE)
  hist(stepsperday,col="red",ylim = c(0,20), breaks = seq(0,25000, by=2500),main="Total steps Taken per day",xlab="steps taken per day")
 ```
+
+![](PA1_template_files/figure-html/Number Of Steps taken per day-1.png)<!-- -->
  
  **Mean of total steps**
  
  
-```{r Mean of Total steps taken per day}
+
+```r
  mean(stepsperday)
+```
+
+```
+## [1] 9354.23
 ```
  
  
   **Median of Total steps**
  
  
-```{r Median of total steps taken per day}
+
+```r
  median(stepsperday)
+```
+
+```
+## [1] 10395
 ```
  
  
@@ -56,18 +77,26 @@ stepsperday<-tapply(data$steps,data$date,sum,na.rm=TRUE)
 ## Average daily pattern 
 
 
-```{r}
+
+```r
 avgdaily_activity<-aggregate(data$steps ,by=list(data$interval),mean,na.rm=TRUE)
  names(avgdaily_activity)<-c("interval","mean")
  plot(avgdaily_activity$interval,avgdaily_activity$mean,xlab="average number of steps ",ylab="Interval",main="Average Daily Pattern",type="l")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
 
 **Interval having Maximum number of steps**
 
 
-```{r}
+
+```r
 avgdaily_activity[which.max(avgdaily_activity$mean),]$interval
+```
+
+```
+## [1] 835
 ```
 
 
@@ -80,15 +109,21 @@ avgdaily_activity[which.max(avgdaily_activity$mean),]$interval
 
 
 
-```{r}
+
+```r
  sum(is.na(data))
+```
+
+```
+## [1] 2304
 ```
 
 
 **Devising a strategy - taking mean for that day**
 
 
-```{r}
+
+```r
 imputed_steps <-  avgdaily_activity$mean[match(data$interval,  avgdaily_activity$interval)]
 ```
 
@@ -97,19 +132,27 @@ imputed_steps <-  avgdaily_activity$mean[match(data$interval,  avgdaily_activity
 **Creating a new dataframe with imputed steps**
 
 
-```{r}
+
+```r
 imputed_data <- transform(data, steps = ifelse(is.na(data$steps), yes = imputed_steps, no = data$steps))
 imputedstepsperday<-tapply(imputed_data$steps,imputed_data$date,sum,na.rm=TRUE)
 hist(imputedstepsperday,col="red",ylim = c(0,20), breaks = seq(0,25000, by=2500),main="Total steps Taken per day",xlab="imputed steps taken per day")
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
 
 
 **Mean of total steps**
  
  
-```{r}
+
+```r
  mean(imputedstepsperday)
+```
+
+```
+## [1] 10766.19
 ```
  
  
@@ -117,9 +160,14 @@ hist(imputedstepsperday,col="red",ylim = c(0,20), breaks = seq(0,25000, by=2500)
  **Median of Total steps**
  
  
-```{r}
+
+```r
  median(imputedstepsperday)
-``` 
+```
+
+```
+## [1] 10766.19
+```
 
 
 
@@ -132,7 +180,8 @@ hist(imputedstepsperday,col="red",ylim = c(0,20), breaks = seq(0,25000, by=2500)
 
 **Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.**
 
-```{r}
+
+```r
 imputed_data$date <- as.Date(strptime(imputed_data$date, format="%Y-%m-%d"))
 imputed_data$day <- weekdays(imputed_data$date)
 for (i in 1:nrow(data)) {
@@ -156,11 +205,14 @@ stepsByDay <- aggregate(imputed_data$steps ~ imputed_data$interval + imputed_dat
 
 
 
-```{r}
+
+```r
 names(stepsByDay) <- c("interval", "day", "steps")
 library(lattice)
 xyplot(steps ~ interval | day, stepsByDay, type = "l", layout = c(1, 2), 
     xlab = "Interval", ylab = "Number of steps")
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 
 
