@@ -84,7 +84,7 @@ avgdaily_activity<-aggregate(data$steps ,by=list(data$interval),mean,na.rm=TRUE)
  plot(avgdaily_activity$interval,avgdaily_activity$mean,xlab="average number of steps ",ylab="Interval",main="Average Daily Pattern",type="l")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+![](PA1_template_files/figure-html/Average Daily Pattern-1.png)<!-- -->
 
 
 **Interval having Maximum number of steps**
@@ -139,7 +139,7 @@ imputedstepsperday<-tapply(imputed_data$steps,imputed_data$date,sum,na.rm=TRUE)
 hist(imputedstepsperday,col="red",ylim = c(0,20), breaks = seq(0,25000, by=2500),main="Total steps Taken per day",xlab="imputed steps taken per day")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](PA1_template_files/figure-html/imputed steps taken per day-1.png)<!-- -->
 
 
 
@@ -213,6 +213,6 @@ xyplot(steps ~ interval | day, stepsByDay, type = "l", layout = c(1, 2),
     xlab = "Interval", ylab = "Number of steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
+![](PA1_template_files/figure-html/panel plot containing a time series plot-1.png)<!-- -->
 
 
