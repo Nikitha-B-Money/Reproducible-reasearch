@@ -28,7 +28,7 @@ str(data)
 ## What is mean total number of steps taken per day?
 
 
-```{r Number Of Steps taken per day}
+```{r }
 stepsperday<-tapply(data$steps,data$date,sum,na.rm=TRUE)
  hist(stepsperday,col="red",ylim = c(0,20), breaks = seq(0,25000, by=2500),main="Total steps Taken per day",xlab="steps taken per day")
 ```
@@ -56,7 +56,7 @@ stepsperday<-tapply(data$steps,data$date,sum,na.rm=TRUE)
 ## Average daily pattern 
 
 
-```{r Average Daily Pattern}
+```{r}
 avgdaily_activity<-aggregate(data$steps ,by=list(data$interval),mean,na.rm=TRUE)
  names(avgdaily_activity)<-c("interval","mean")
  plot(avgdaily_activity$interval,avgdaily_activity$mean,xlab="average number of steps ",ylab="Interval",main="Average Daily Pattern",type="l")
@@ -97,7 +97,7 @@ imputed_steps <-  avgdaily_activity$mean[match(data$interval,  avgdaily_activity
 **Creating a new dataframe with imputed steps**
 
 
-```{r imputed steps taken per day}
+```{r}
 imputed_data <- transform(data, steps = ifelse(is.na(data$steps), yes = imputed_steps, no = data$steps))
 imputedstepsperday<-tapply(imputed_data$steps,imputed_data$date,sum,na.rm=TRUE)
 hist(imputedstepsperday,col="red",ylim = c(0,20), breaks = seq(0,25000, by=2500),main="Total steps Taken per day",xlab="imputed steps taken per day")
@@ -156,7 +156,7 @@ stepsByDay <- aggregate(imputed_data$steps ~ imputed_data$interval + imputed_dat
 
 
 
-```{r panel plot containing a time series plot}
+```{r}
 names(stepsByDay) <- c("interval", "day", "steps")
 library(lattice)
 xyplot(steps ~ interval | day, stepsByDay, type = "l", layout = c(1, 2), 
